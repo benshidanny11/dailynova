@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_latest_news"
+            android:icon="@drawable/ic_latest_news"
+            android:title="Latest news"
+            />
+        <item
+            android:id="@+id/nav_tech_news"
+            android:icon="@drawable/ic_tech"
+            android:title="Tech news" />
+        <item
+            android:id="@+id/nav_other_news"
+            android:icon="@drawable/ic_tech"
+            android:title="Other" />
+    </group>
+    <item android:title="App management">
+        <menu>
+            <item
+                android:id="@+id/nav_share_app"
+                android:icon="@drawable/ic_share_black_24dp"
+                android:title="Share" />
+            <item
+                android:id="@+id/nav_create_account"
+                android:icon="@drawable/ic_account_box_black_24dp"
+                android:title="Sign up to Dailynova" />
+        </menu>
+    </item>
+
+
+</menu>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SearchResultActivity"
+    android:orientation="vertical">
+  <include layout="@layout/search_activity_toolbar"/>
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_12sdp"
+        android:text="Result found"
+        android:gravity="center"
+        android:id="@+id/txt_result_message_in_search_activity"
+        android:layout_marginBottom="@dimen/_2sdp"
+        android:textColor="#3C3458"
+        android:visibility="gone"/>
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rec_search_result_list"
+        android:layout_below="@+id/txt_result_message_in_search_activity">
+
+    </android.support.v7.widget.RecyclerView>
+    <ProgressBar
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:id="@+id/progress_in_search_activity"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        />
+  </RelativeLayout>
+</LinearLayout>

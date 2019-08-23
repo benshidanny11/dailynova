@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_trending"
+        android:icon="@drawable/ic_trending"
+        android:title="" />
+
+    <item
+        android:id="@+id/nav_videos"
+        android:icon="@drawable/ic_video_frag"
+        android:title="" />
+    <item
+        android:id="@+id/nav_lyrics"
+        android:icon="@drawable/ic_lyrics_frag"
+        android:title="" />
+    <item
+        android:id="@+id/nav_life_style"
+        android:icon="@drawable/ic_life_style"
+        android:title="" />
+
+    <item
+        android:id="@+id/nav_news"
+        android:icon="@drawable/ic_news_frag"
+        android:title="" />
+
+
+</menu>

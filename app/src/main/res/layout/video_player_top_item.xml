@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40sdp">
+        <RelativeLayout
+            android:layout_width="@dimen/_200sdp"
+            android:layout_height="match_parent"
+            android:paddingTop="@dimen/_5sdp"
+            android:paddingLeft="@dimen/_2sdp"
+            android:paddingBottom="@dimen/_5sdp"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Video name"
+                android:textSize="@dimen/_12sdp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textStyle="bold"
+                android:id="@+id/txt_video_name_in_player_top_item"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Video source"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:layout_alignParentBottom="true"
+                android:id="@+id/txt_video_source_in_player_top_item"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="@dimen/_10sdp"
+            >
+            <ImageView
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                app:srcCompat="@drawable/ic_arrow_downward_black_24dp"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/img_download_video_in_player_top_item"
+
+                />
+            <ImageView
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:src="@drawable/share_img"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/_7sdp"
+                android:id="@+id/img_share_video_in_player_top_item"
+                />
+        </RelativeLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0.7dp"
+        android:background="#B4B4B4">
+
+    </LinearLayout>
+</LinearLayout>

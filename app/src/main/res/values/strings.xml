@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">DailyNova</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="for_you">For you</string>
+    <string name="videos">Videos</string>
+    <string name="lyrics">Lyrics</string>
+    <string name="updates">Updates</string>
+    <string name="life_style">Life style</string>
+    <string name="video_name">Video name</string>
+    <string name="video_duration">00:00</string>
+    <string name="lifestyle_title">Lifestyle title</string>
+    <string name="lifestyle_source">Lifestyle source</string>
+    <string name="upload_date">Upload date</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="todo">TODO</string>
+    <string name="error_no_input">Please provide query</string>
+    <string name="message_result_found">Result found</string>
+    <string name="message_result_not_found">No result found</string>
+</resources>

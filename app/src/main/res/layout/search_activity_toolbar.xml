@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.AppBarLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:id="@+id/toolbar_in_search_activity"
+    app:popupTheme="@style/AppTheme.PopupOverlay">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="@dimen/_20sdp"
+        app:srcCompat="@drawable/ic_arrow_back_black_24dp"
+        android:layout_centerVertical="true"
+        android:id="@+id/img_action_back_in_search_activity"
+        android:layout_marginLeft="@dimen/_2sdp"
+        />
+    <EditText
+        android:layout_width="@dimen/_240sdp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:hint="Type your query here"
+        android:gravity="center"
+        android:textSize="@dimen/_14sdp"
+        android:textColor="#615D5D"
+        android:id="@+id/txt_search_in_search_activity"
+        android:backgroundTint="#999797"
+        android:textCursorDrawable="@drawable/color_cursor"
+
+        />
+    <ImageView
+        android:layout_width="@dimen/_25sdp"
+        android:layout_height="@dimen/_25sdp"
+        app:srcCompat="@drawable/ic_search_black_24dp"
+        android:layout_centerVertical="true"
+        android:id="@+id/img_action_search_in_search_activity"
+        android:layout_alignParentEnd="true"
+
+        />
+</RelativeLayout>
+</android.support.design.widget.AppBarLayout>

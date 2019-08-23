@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/nav_header_height"
+    android:background="@drawable/side_nav_bar"
+    android:orientation="vertical"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark"
+    >
+
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="@dimen/_60sdp"
+       android:layout_centerVertical="true"
+       android:paddingLeft="@dimen/_10sdp">
+       <ImageView
+           android:id="@+id/imageView"
+           android:layout_width="@dimen/_60sdp"
+           android:layout_height="match_parent"
+           android:paddingTop="@dimen/nav_header_vertical_spacing"
+           android:src="@mipmap/ic_launcher"
+           android:layout_centerVertical="true"
+           />
+
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:paddingTop="@dimen/nav_header_vertical_spacing"
+           android:text="Dailynova App"
+           android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+           android:textColor="#696868"
+           android:layout_gravity="bottom"
+           android:layout_marginLeft="@dimen/_3sdp"
+           android:layout_marginBottom="@dimen/_3sdp"/>
+   </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="#F0EFEF"
+        android:layout_alignParentBottom="true"
+        >
+
+    </LinearLayout>
+
+
+</RelativeLayout>
