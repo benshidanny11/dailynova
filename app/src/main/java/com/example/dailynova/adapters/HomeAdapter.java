@@ -2,23 +2,18 @@ package com.example.dailynova.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.dailynova.DisplayLifeStyleActivity;
-import com.example.dailynova.DisplayLyricsActivity;
 import com.example.dailynova.DisplayNewsActivity;
-import com.example.dailynova.PlayVideoActivity;
 import com.example.dailynova.R;
 import com.example.dailynova.items.TrendingItem;
-import com.example.dailynova.utils.ItemTypeUtil;
 
 import java.util.ArrayList;
 
@@ -36,13 +31,11 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         View view;
         RecyclerView.ViewHolder viewHolder;
-        if (viewType==ItemTypeUtil.NEWS_ITEM_TyPE){
+
             view=LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.row_updates_item, viewGroup, false);
             viewHolder=new HomeUpdatesHolder(view);
             return viewHolder;
-        }
 
-        return null;
     }
 
     @Override
@@ -78,18 +71,6 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return homeItems.size();
     }
 
-    @Override
-    public int getItemViewType(int position) {
-
-
-      if (position%2==0){
-          return ItemTypeUtil.NEWS_ITEM_TyPE;
-      }
-      else {
-          return ItemTypeUtil.LIFESTYLE_ITEM_TyPE;
-      }
-
-    }
 
     class HomeVideosHolder extends RecyclerView.ViewHolder {
         TextView txtVideoName, txtVideoDuration, txtPostedOn, txtVideoSource;

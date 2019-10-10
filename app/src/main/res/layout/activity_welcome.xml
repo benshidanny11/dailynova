@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".WelcomeActivity">
@@ -12,7 +13,7 @@
         <ImageView
             android:layout_width="@dimen/_70sdp"
             android:layout_height="@dimen/_70sdp"
-            android:src="@mipmap/ic_launcher"
+            android:src="@drawable/app_logo"
             android:layout_centerInParent="true"
             android:contentDescription="@string/todo"
             android:layout_alignParentBottom="true"
@@ -41,11 +42,14 @@
         android:gravity="center"
         android:textSize="@dimen/_12sdp"
         android:textColor="#7A7070"
+        android:id="@+id/txt_user_number_in_welcome"
         />
     <RelativeLayout
+        android:layout_marginTop="@dimen/_50sdp"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_180sdp"
-        android:layout_alignParentBottom="true">
+        android:layout_below="@+id/txt_user_number_in_welcome"
+        >
       <RelativeLayout
           android:layout_width="@dimen/_160sdp"
           android:layout_height="@dimen/_90sdp">
@@ -116,4 +120,26 @@
             </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>
+
+    <androidx.cardview.widget.CardView
+        android:layout_height="@dimen/_30sdp"
+        android:layout_width="@dimen/_200sdp"
+        android:layout_margin="@dimen/_8sdp"
+        card_view:cardElevation="@dimen/_2sdp"
+        card_view:cardCornerRadius="@dimen/_3sdp"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        >
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+            android:textSize="@dimen/_11sdp"
+            android:theme="@style/MatButton"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:text="Sign in"
+            android:textAllCaps="false"
+            android:id="@+id/btn_sign_to_daily_nova"
+            />
+    </androidx.cardview.widget.CardView>
 </RelativeLayout>

@@ -32,4 +32,10 @@
         <item name="android:icon">@drawable/ic_search_black_24dp</item>
     </style>
 
+    <style name="MatButton" parent="Theme.MaterialComponents">
+        <item name="colorOnPrimary">#888888</item>
+        <item name="colorPrimary">#FFFFFF</item>
+        <item name="colorOnSurface">@color/colorAccent</item>
+    </style>
+
 </resources>

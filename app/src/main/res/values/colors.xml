@@ -8,4 +8,5 @@
     <color name="iconColor">#920303</color>
     <color name="errorColor">#FF035B</color>
     <color name="message_color">#3C3458</color>
+    <color name="link_color">#00B7FF</color>
 </resources>

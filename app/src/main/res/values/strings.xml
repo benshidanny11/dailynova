@@ -20,4 +20,5 @@
     <string name="error_no_input">Please provide query</string>
     <string name="message_result_found">Result found</string>
     <string name="message_result_not_found">No result found</string>
+    <string name="read_more">Read more on </string>
 </resources>

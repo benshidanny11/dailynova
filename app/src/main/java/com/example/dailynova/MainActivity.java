@@ -4,28 +4,30 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.design.bottomnavigation.LabelVisibilityMode;
-import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
+
+import com.bumptech.glide.Glide;
+import com.google.android.material.bottomnavigation.LabelVisibilityMode;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.dailynova.fragments.FragmentLifeStyle;
 import com.example.dailynova.fragments.FragmentLyrics;
 import com.example.dailynova.fragments.FragmentTrending;
-import com.example.dailynova.fragments.FragmentUpddates;
+import com.example.dailynova.fragments.FragmentBusiness;
 import com.example.dailynova.fragments.FragmentVideo;
 
 
@@ -35,7 +37,10 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class MainActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener {
 
-    ImageView imgSerch;
+    ImageView imgSerch,imgUserProfile;
+    TextView txtNotification;
+    TextView txtUserName;
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -56,8 +61,8 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                 case R.id.nav_life_style:
                     selectedFragment=new FragmentLifeStyle();
                     break;
-                case R.id.nav_news:
-                    selectedFragment=new FragmentUpddates();
+                case R.id.nav_busines:
+                    selectedFragment=new FragmentBusiness();
                     break;
             }
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,selectedFragment).commit();
@@ -86,6 +91,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view_drawer);
+        txtNotification=(TextView)findViewById(R.id.txt_notification_badge_in_app_bar);
         navigationView.setNavigationItemSelectedListener(this);
         navView.setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILITY_LABELED);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -117,9 +123,9 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                     startActivity(intent);
                     //Toast.makeText(MainActivity.this, "In lifestyle fragment", Toast.LENGTH_SHORT).show();
                 }
-                else if(getVisibleFragment() instanceof FragmentUpddates){
+                else if(getVisibleFragment() instanceof FragmentBusiness){
                     Intent intent=new Intent(MainActivity.this,SearchResultActivity.class);
-                    intent.putExtra("fragment","updates");
+                    intent.putExtra("fragment","business");
                     startActivity(intent);
                    // Toast.makeText(MainActivity.this, "In updates fragment", Toast.LENGTH_SHORT).show();
                 }
@@ -130,6 +136,14 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         ActivityCompat.requestPermissions(MainActivity.this,
                 new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.INTERNET},
                 1);
+        txtUserName=(TextView)findViewById(R.id.txt_user_name_in_main_activity);
+        imgUserProfile=(ImageView)findViewById(R.id.img_user_profile_in_main);
+
+       if (getIntent().getExtras()!=null){
+          txtUserName.setText(getIntent().getExtras().getString("displayName"));
+           Glide.with(this).load(getIntent().getExtras().getString("imgUrl")).into(imgUserProfile);
+
+       }
     }
 
     @Override

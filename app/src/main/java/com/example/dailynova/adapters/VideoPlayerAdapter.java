@@ -4,21 +4,22 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.dailynova.PlayVideoActivity;
 import com.example.dailynova.R;
 import com.example.dailynova.items.VideoItem;
 import com.example.dailynova.utils.PlayActivityUtil;
@@ -94,7 +95,43 @@ public class VideoPlayerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
       videoHolder.imgMore.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View v) {
-              Toast.makeText(context, "Not yet added", Toast.LENGTH_SHORT).show();
+              PopupMenu menu=new PopupMenu(context,v);
+              menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                  @Override
+                  public boolean onMenuItemClick(MenuItem item) {
+
+                      switch (item.getItemId()){
+                          case R.id.mnu_play_video:
+                              Intent playIntent=new Intent(context, PlayActivityUtil.class);
+                              ((Activity)context).finish();
+                              playIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |Intent.FLAG_ACTIVITY_NEW_TASK);
+                              playIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                              playIntent.putExtra("videoUrl",videoItem.getVideoDownloadUrl());
+                              playIntent.putExtra("videoName",videoItem.getVideoName());
+                              playIntent.putExtra("videoDuration",videoItem.getVideoDuration());
+                              playIntent.putExtra("videoLikes",videoItem.getVideoLikes());
+                              playIntent.putExtra("videoDownloads",videoItem.getVideoDownloads());
+                              playIntent.putExtra("videoSource",videoItem.getVideoSource());
+                              context.startActivity(playIntent);
+                              return true;
+                          case R.id.mnu_view_later:
+                              Toast.makeText(context, "Added to view later", Toast.LENGTH_SHORT).show();
+                              return true;
+                          case R.id.mnu_share_video:
+                              Intent sendIntent = new Intent();
+                              sendIntent.setAction(Intent.ACTION_SEND);
+                              sendIntent.putExtra(Intent.EXTRA_TEXT,"From DailyNova: "+ videoItem.getVideoDownloadUrl());
+                              sendIntent.setType("text/plain");
+                              context.startActivity(sendIntent);
+                              return true;
+                          default:
+                              return false;
+                      }
+
+                  }
+              });
+              menu.inflate(R.menu.popup_menu_video);
+              menu.show();
           }
       });
          viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -114,7 +151,9 @@ public class VideoPlayerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
              }
          });
+
      }
+
 
     }
 

@@ -72,12 +72,12 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_35sdp">
             <RelativeLayout
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/_230sdp"
                 android:layout_height="match_parent"
                 android:paddingTop="@dimen/_2sdp"
                 android:paddingLeft="@dimen/_3sdp">
                 <TextView
-                    android:layout_width="@dimen/_100sdp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Video source"
                     android:maxLines="1"
@@ -98,42 +98,7 @@
                     android:id="@+id/txt_posted_on_in_row_video"
                     />
             </RelativeLayout>
-            <RelativeLayout
-                android:layout_width="@dimen/_120sdp"
-                android:layout_height="match_parent"
-                android:paddingTop="@dimen/_3sdp">
-                <ImageView
-                    android:layout_width="@dimen/_18sdp"
-                    android:layout_height="@dimen/_18sdp"
-                    app:srcCompat="@drawable/like_icon"
 
-                    android:layout_centerHorizontal="true"
-                    android:id="@+id/img_likes_in_row_video"/>
-                <ImageView
-                    android:layout_width="@dimen/_18sdp"
-                    android:layout_height="@dimen/_18sdp"
-                    app:srcCompat="@drawable/ic_views"
-                    android:layout_alignParentRight="true"
-                    android:id="@+id/img_downloads_in_row_video"
-                    android:layout_marginRight="@dimen/_2sdp"/>
-
-                <TextView
-                    android:layout_width="@dimen/_20sdp"
-                    android:layout_height="@dimen/_20sdp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:gravity="center"
-                    android:text="0"
-                    />
-                <TextView
-                    android:layout_width="@dimen/_20sdp"
-                    android:layout_height="@dimen/_20sdp"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentBottom="true"
-                    android:gravity="center"
-                    android:text="0" />
-
-            </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -146,15 +111,26 @@
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     app:srcCompat="@drawable/ic_arrow_downward_black_24dp" />
+                <ProgressBar
+                    android:id="@+id/progress_for_downloading_video_in_video_item"
+                    android:layout_width="@dimen/_18sdp"
+                    android:layout_height="@dimen/_18sdp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/_2sdp"
+                    android:visibility="gone"
+                    android:indeterminateDrawable="@drawable/progressbar"
+                    />
 
                 <ImageView
                     android:id="@+id/img_share_video_in_row_video"
                     android:layout_width="@dimen/_18sdp"
                     android:layout_height="@dimen/_18sdp"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/_2sdp"
+                    android:layout_marginEnd="@dimen/_2sdp"
                     app:srcCompat="@drawable/share_img" />
+
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>

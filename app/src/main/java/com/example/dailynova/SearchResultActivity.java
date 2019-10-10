@@ -2,13 +2,13 @@ package com.example.dailynova;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Color;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -17,11 +17,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.dailynova.adapters.BusinessAdapter;
 import com.example.dailynova.adapters.HomeAdapter;
 import com.example.dailynova.adapters.LifestyleAdapter;
 import com.example.dailynova.adapters.LyricsAdapter;
 import com.example.dailynova.adapters.VideoAdapter;
+import com.example.dailynova.builders.LifestyleBuilder;
 import com.example.dailynova.builders.TrendingItemBuilder;
+import com.example.dailynova.items.BusinessItem;
 import com.example.dailynova.items.LifeStyleItem;
 import com.example.dailynova.items.LyricsItem;
 import com.example.dailynova.items.TrendingItem;
@@ -52,10 +55,12 @@ public class SearchResultActivity extends AppCompatActivity {
     LyricsItem lyrics;
     LyricsAdapter lyricsAdapter;
     ArrayList<LyricsItem> lyricsItems;
-    RecyclerView recLifestyleList;
     ArrayList<LifeStyleItem> lifeStyleItems;
     LifestyleAdapter adapter;
     LifeStyleItem item;
+    BusinessAdapter businessAdapter;
+    BusinessItem businessItem;
+    ArrayList<BusinessItem> businessItems;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,55 +91,164 @@ public class SearchResultActivity extends AppCompatActivity {
                   txtSearchResult.setTextColor(R.color.errorColor);
                 }
                 else{
-                    homeItems=new ArrayList<>();
                    if (bundle!=null){
 
                      if(bundle.getString("fragment").equals("trending"))  {
+                         homeItems=new ArrayList<>();
                          progressBar.setVisibility(View.VISIBLE);
                          Query trendingQueryByTitle= FirebaseDatabase.getInstance().getReference().child("news")
                                  .orderByChild("newsTitle").startAt(txtSerch.getText().toString());
-                         Query trendingQueryByBody= FirebaseDatabase.getInstance().getReference().child("news")
+                         final Query trendingQueryByBody= FirebaseDatabase.getInstance().getReference().child("news")
                                  .orderByChild("newsBody").startAt(txtSerch.getText().toString());
-                         Query trendingQueryByCategory= FirebaseDatabase.getInstance().getReference().child("news")
+                         final Query trendingQueryByCategory= FirebaseDatabase.getInstance().getReference().child("news")
                                  .orderByChild("newsCategory").startAt(txtSerch.getText().toString());
-                         Query trendingQueryByOwner= FirebaseDatabase.getInstance().getReference().child("news")
+                         final Query trendingQueryByOwner= FirebaseDatabase.getInstance().getReference().child("news")
                                  .orderByChild("newsOwner").startAt(txtSerch.getText().toString());
 
-                         /*trendingQueryByTitle.addListenerForSingleValueEvent(new ValueEventListener() {
+                         trendingQueryByTitle.addListenerForSingleValueEvent(new ValueEventListener() {
                              @Override
                              public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                  try
                                  {
                                      if (!dataSnapshot.exists()){
-                                         progressBar.setVisibility(View.GONE);
-                                         txtSearchResult.setVisibility(View.VISIBLE);
-                                         txtSearchResult.setText(R.string.message_result_not_found);
-                                         txtSearchResult.setTextColor(R.color.message_color);
+                                       trendingQueryByOwner.addListenerForSingleValueEvent(new ValueEventListener() {
+                                           @Override
+                                           public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                               if(!dataSnapshot.exists()){
+                                                  trendingQueryByBody.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                      @Override
+                                                      public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                          if (!dataSnapshot.exists()){
+                                                              trendingQueryByCategory.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                  @Override
+                                                                  public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                      if (!dataSnapshot.exists()){
+                                                                          progressBar.setVisibility(View.GONE);
+                                                                          txtSearchResult.setVisibility(View.VISIBLE);
+                                                                          txtSearchResult.setText(R.string.message_result_not_found);
+                                                                          txtSearchResult.setTextColor(R.color.message_color);
+                                                                      }
+                                                                      else{
+                                                                          for (DataSnapshot ds:dataSnapshot.getChildren())
+                                                                          {
+                                                                              try
+                                                                              {
+                                                                                  txtSearchResult.setVisibility(View.GONE);
+                                                                                  txtSerch.setText(null);
+                                                                                  progressBar.setVisibility(View.GONE);
+                                                                                  HashMap lyricsMap = (HashMap)ds.getValue();
+                                                                                  TrendingItemBuilder itemBuilder=new TrendingItemBuilder();
+                                                                                  final TrendingItem trendingItem = itemBuilder.setNewsTitle((String)lyricsMap.get("newsTitle"))
+                                                                                          .setNewsBody((String)lyricsMap.get("newsBody"))
+                                                                                          .setNewsOwner((String)lyricsMap.get("newsOwner"))
+                                                                                          .setNewsCategory((String)lyricsMap.get("newsCategory"))
+                                                                                          .setNewsImgDownloadLink((String) lyricsMap.get("newsImageUrl"))
+                                                                                          .setPostedOn((String) lyricsMap.get("postedOn"))
+                                                                                          .buildNewsItem();
+                                                                                  ((HomeAdapter)recSearchResultList.getAdapter()).upateAdapter(trendingItem);
+
+                                                                              }catch (Exception e)
+                                                                              {
+                                                                                  Toast.makeText(SearchResultActivity.this, "In load data for loop: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                              }
+                                                                          }
+                                                                      }
+                                                                  }
+
+                                                                  @Override
+                                                                  public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                  }
+                                                              });
+                                                          }else {
+                                                              for (DataSnapshot ds:dataSnapshot.getChildren())
+                                                              {
+                                                                  try
+                                                                  {
+                                                                      txtSearchResult.setVisibility(View.GONE);
+                                                                      txtSerch.setText(null);
+                                                                      progressBar.setVisibility(View.GONE);
+                                                                      HashMap lyricsMap = (HashMap)ds.getValue();
+                                                                      TrendingItemBuilder itemBuilder=new TrendingItemBuilder();
+                                                                      final TrendingItem trendingItem = itemBuilder.setNewsTitle((String)lyricsMap.get("newsTitle"))
+                                                                              .setNewsBody((String)lyricsMap.get("newsBody"))
+                                                                              .setNewsOwner((String)lyricsMap.get("newsOwner"))
+                                                                              .setNewsCategory((String)lyricsMap.get("newsCategory"))
+                                                                              .setNewsImgDownloadLink((String) lyricsMap.get("newsImageUrl"))
+                                                                              .setPostedOn((String) lyricsMap.get("postedOn"))
+                                                                              .buildNewsItem();
+                                                                      ((HomeAdapter)recSearchResultList.getAdapter()).upateAdapter(trendingItem);
+
+                                                                  }catch (Exception e)
+                                                                  {
+                                                                      Toast.makeText(SearchResultActivity.this, "In load data for loop: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                  }
+                                                              }
+                                                          }
+                                                      }
+
+                                                      @Override
+                                                      public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                      }
+                                                  });
+                                               }else{
+                                                   for (DataSnapshot ds:dataSnapshot.getChildren())
+                                                   {
+                                                       try
+                                                       {
+                                                           txtSearchResult.setVisibility(View.GONE);
+                                                           txtSerch.setText(null);
+                                                           progressBar.setVisibility(View.GONE);
+                                                           HashMap lyricsMap = (HashMap)ds.getValue();
+                                                           TrendingItemBuilder itemBuilder=new TrendingItemBuilder();
+                                                           final TrendingItem trendingItem = itemBuilder.setNewsTitle((String)lyricsMap.get("newsTitle"))
+                                                                   .setNewsBody((String)lyricsMap.get("newsBody"))
+                                                                   .setNewsOwner((String)lyricsMap.get("newsOwner"))
+                                                                   .setNewsCategory((String)lyricsMap.get("newsCategory"))
+                                                                   .setNewsImgDownloadLink((String) lyricsMap.get("newsImageUrl"))
+                                                                   .setPostedOn((String) lyricsMap.get("postedOn"))
+                                                                   .buildNewsItem();
+                                                           ((HomeAdapter)recSearchResultList.getAdapter()).upateAdapter(trendingItem);
+
+                                                       }catch (Exception e)
+                                                       {
+                                                           Toast.makeText(SearchResultActivity.this, "In load data for loop: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                       }
+                                                   }
+                                               }
+                                           }
+
+                                           @Override
+                                           public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                           }
+                                       });
 
                                      }
-                                     for (DataSnapshot ds:dataSnapshot.getChildren())
-                                     {
-                                         try
+                                     else{
+                                         for (DataSnapshot ds:dataSnapshot.getChildren())
                                          {
-                                             txtSearchResult.setVisibility(View.VISIBLE);
-                                             txtSearchResult.setText(R.string.message_result_found);
-                                             txtSearchResult.setTextColor(R.color.message_color);
-                                             txtSerch.setText(null);
-                                             progressBar.setVisibility(View.GONE);
-                                             HashMap lyricsMap = (HashMap)ds.getValue();
-                                             TrendingItemBuilder itemBuilder=new TrendingItemBuilder();
-                                             final TrendingItem trendingItem = itemBuilder.setNewsTitle((String)lyricsMap.get("newsTitle"))
-                                                     .setNewsBody((String)lyricsMap.get("newsBody"))
-                                                     .setNewsOwner((String)lyricsMap.get("newsOwner"))
-                                                     .setNewsCategory((String)lyricsMap.get("newsCategory"))
-                                                     .setNewsImgDownloadLink((String) lyricsMap.get("newsImageUrl"))
-                                                     .setPostedOn((String) lyricsMap.get("postedOn"))
-                                                     .buildNewsItem();
-                                             ((HomeAdapter)recSearchResultList.getAdapter()).upateAdapter(trendingItem);
+                                             try
+                                             {
+                                                 txtSearchResult.setVisibility(View.GONE);
+                                                 txtSerch.setText(null);
+                                                 progressBar.setVisibility(View.GONE);
+                                                 HashMap lyricsMap = (HashMap)ds.getValue();
+                                                 TrendingItemBuilder itemBuilder=new TrendingItemBuilder();
+                                                 final TrendingItem trendingItem = itemBuilder.setNewsTitle((String)lyricsMap.get("newsTitle"))
+                                                         .setNewsBody((String)lyricsMap.get("newsBody"))
+                                                         .setNewsOwner((String)lyricsMap.get("newsOwner"))
+                                                         .setNewsCategory((String)lyricsMap.get("newsCategory"))
+                                                         .setNewsImgDownloadLink((String) lyricsMap.get("newsImageUrl"))
+                                                         .setPostedOn((String) lyricsMap.get("postedOn"))
+                                                         .buildNewsItem();
+                                                 ((HomeAdapter)recSearchResultList.getAdapter()).upateAdapter(trendingItem);
 
-                                         }catch (Exception e)
-                                         {
-                                             Toast.makeText(SearchResultActivity.this, "In load data for loop: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                             }catch (Exception e)
+                                             {
+                                                 Toast.makeText(SearchResultActivity.this, "In load data for loop: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                             }
                                          }
                                      }
                                  }
@@ -149,153 +263,6 @@ public class SearchResultActivity extends AppCompatActivity {
                               progressBar.setVisibility(View.GONE);
                                  Toast.makeText(SearchResultActivity.this, "No result found", Toast.LENGTH_SHORT).show();
                              }
-                         });*/
-                         /*trendingQueryByBody.addListenerForSingleValueEvent(new ValueEventListener() {
-                             @Override
-                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                 try
-                                 {
-                                     if (!dataSnapshot.exists()){
-                                         progressBar.setVisibility(View.GONE);
-                                         txtSearchResult.setVisibility(View.VISIBLE);
-                                         txtSearchResult.setText(R.string.message_result_not_found);
-                                         txtSearchResult.setTextColor(R.color.message_color);
-
-                                     }
-                                     for (DataSnapshot ds:dataSnapshot.getChildren())
-                                     {
-                                         try
-                                         {
-                                             txtSearchResult.setVisibility(View.VISIBLE);
-                                             txtSearchResult.setText(R.string.message_result_found);
-                                             txtSearchResult.setTextColor(R.color.message_color);
-                                             txtSerch.setText(null);
-                                             progressBar.setVisibility(View.GONE);
-                                             HashMap lyricsMap = (HashMap)ds.getValue();
-                                             TrendingItemBuilder itemBuilder=new TrendingItemBuilder();
-                                             final TrendingItem trendingItem = itemBuilder.setNewsTitle((String)lyricsMap.get("newsTitle"))
-                                                     .setNewsBody((String)lyricsMap.get("newsBody"))
-                                                     .setNewsOwner((String)lyricsMap.get("newsOwner"))
-                                                     .setNewsCategory((String)lyricsMap.get("newsCategory"))
-                                                     .setNewsImgDownloadLink((String) lyricsMap.get("newsImageUrl"))
-                                                     .setPostedOn((String) lyricsMap.get("postedOn"))
-                                                     .buildNewsItem();
-                                             ((HomeAdapter)recSearchResultList.getAdapter()).upateAdapter(trendingItem);
-
-                                         }catch (Exception e)
-                                         {
-                                             Toast.makeText(SearchResultActivity.this, "In load data for loop: "+e.getMessage(), Toast.LENGTH_SHORT).show();
-                                         }
-                                     }
-                                 }
-                                 catch (Exception e)
-                                 {
-                                     Toast.makeText(SearchResultActivity.this, "In load data: "+e.getMessage(), Toast.LENGTH_SHORT).show();
-                                 }
-                             }
-
-                             @Override
-                             public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                             }
-                         });*/
-                         trendingQueryByCategory.addListenerForSingleValueEvent(new ValueEventListener() {
-                             @Override
-                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                 try
-                                 {
-                                     if (!dataSnapshot.exists()){
-                                         progressBar.setVisibility(View.GONE);
-                                         txtSearchResult.setVisibility(View.VISIBLE);
-                                         txtSearchResult.setText(R.string.message_result_not_found);
-                                         txtSearchResult.setTextColor(R.color.errorColor);
-
-                                     }
-                                     for (DataSnapshot ds:dataSnapshot.getChildren())
-                                     {
-                                         try
-                                         {
-                                             txtSearchResult.setVisibility(View.VISIBLE);
-                                             txtSearchResult.setText(R.string.message_result_found);
-                                             txtSearchResult.setTextColor(R.color.message_color);
-                                             txtSerch.setText(null);
-                                             progressBar.setVisibility(View.GONE);
-                                             HashMap lyricsMap = (HashMap)ds.getValue();
-                                             TrendingItemBuilder itemBuilder=new TrendingItemBuilder();
-                                             final TrendingItem trendingItem = itemBuilder.setNewsTitle((String)lyricsMap.get("newsTitle"))
-                                                     .setNewsBody((String)lyricsMap.get("newsBody"))
-                                                     .setNewsOwner((String)lyricsMap.get("newsOwner"))
-                                                     .setNewsCategory((String)lyricsMap.get("newsCategory"))
-                                                     .setNewsImgDownloadLink((String) lyricsMap.get("newsImageUrl"))
-                                                     .setPostedOn((String) lyricsMap.get("postedOn"))
-                                                     .buildNewsItem();
-                                             ((HomeAdapter)recSearchResultList.getAdapter()).upateAdapter(trendingItem);
-
-                                         }catch (Exception e)
-                                         {
-                                             Toast.makeText(SearchResultActivity.this, "In load data for loop: "+e.getMessage(), Toast.LENGTH_SHORT).show();
-                                         }
-                                     }
-                                 }
-                                 catch (Exception e)
-                                 {
-                                     Toast.makeText(SearchResultActivity.this, "In load data: "+e.getMessage(), Toast.LENGTH_SHORT).show();
-                                 }
-                             }
-
-                             @Override
-                             public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                             }
-                         });
-                         trendingQueryByOwner.addListenerForSingleValueEvent(new ValueEventListener() {
-                             @Override
-                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                 try
-                                 {
-                                     if (!dataSnapshot.exists()){
-                                         progressBar.setVisibility(View.GONE);
-                                         txtSearchResult.setVisibility(View.VISIBLE);
-                                         txtSearchResult.setText(R.string.message_result_not_found);
-                                         txtSearchResult.setTextColor(R.color.errorColor);
-
-                                     }
-                                     for (DataSnapshot ds:dataSnapshot.getChildren())
-                                     {
-                                         try
-                                         {
-                                             txtSearchResult.setVisibility(View.VISIBLE);
-                                             txtSearchResult.setText(R.string.message_result_found);
-                                             txtSearchResult.setTextColor(R.color.message_color);
-                                             txtSerch.setText(null);
-                                             progressBar.setVisibility(View.GONE);
-                                             HashMap lyricsMap = (HashMap)ds.getValue();
-                                             TrendingItemBuilder itemBuilder=new TrendingItemBuilder();
-                                             final TrendingItem trendingItem = itemBuilder.setNewsTitle((String)lyricsMap.get("newsTitle"))
-                                                     .setNewsBody((String)lyricsMap.get("newsBody"))
-                                                     .setNewsOwner((String)lyricsMap.get("newsOwner"))
-                                                     .setNewsCategory((String)lyricsMap.get("newsCategory"))
-                                                     .setNewsImgDownloadLink((String) lyricsMap.get("newsImageUrl"))
-                                                     .setPostedOn((String) lyricsMap.get("postedOn"))
-                                                     .buildNewsItem();
-                                             ((HomeAdapter)recSearchResultList.getAdapter()).upateAdapter(trendingItem);
-
-                                         }catch (Exception e)
-                                         {
-                                             Toast.makeText(SearchResultActivity.this, "In load data for loop: "+e.getMessage(), Toast.LENGTH_SHORT).show();
-                                         }
-                                     }
-                                 }
-                                 catch (Exception e)
-                                 {
-                                     Toast.makeText(SearchResultActivity.this, "In load data: "+e.getMessage(), Toast.LENGTH_SHORT).show();
-                                 }
-                             }
-
-                             @Override
-                             public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                             }
                          });
                          homeAdapter = new HomeAdapter(SearchResultActivity.this, homeItems);
                          LinearLayoutManager localLinearLayoutManager = new LinearLayoutManager(SearchResultActivity.this, 1, false);
@@ -308,7 +275,7 @@ public class SearchResultActivity extends AppCompatActivity {
                          videoItems=new ArrayList<>();
                          Query videoQueryByName= FirebaseDatabase.getInstance().getReference().child("videos")
                                  .orderByChild("videoName").startAt(txtSerch.getText().toString());
-                         Query videoQueryBySource= FirebaseDatabase.getInstance().getReference().child("videos")
+                         final Query videoQueryBySource= FirebaseDatabase.getInstance().getReference().child("videos")
                                  .orderByChild("videoSource").startAt(txtSerch.getText().toString());
 
                          videoQueryByName.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -317,29 +284,51 @@ public class SearchResultActivity extends AppCompatActivity {
                                  try
                                  {
                                      if (!dataSnapshot.exists()){
-                                         progressBar.setVisibility(View.GONE);
-                                         txtSearchResult.setVisibility(View.VISIBLE);
-                                         txtSearchResult.setText(R.string.message_result_not_found);
-                                         txtSearchResult.setTextColor(R.color.errorColor);
 
-                                     }
+                                       videoQueryBySource.addListenerForSingleValueEvent(new ValueEventListener() {
+                                           @Override
+                                           public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                               if (!dataSnapshot.exists()){
+                                                   progressBar.setVisibility(View.GONE);
+                                                   txtSearchResult.setVisibility(View.VISIBLE);
+                                                   txtSearchResult.setText(R.string.message_result_not_found);
+                                                   txtSearchResult.setTextColor(R.color.errorColor);
+                                               }
+                                               else {
+                                                   for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                                       try {
+                                                           progressBar.setVisibility(View.GONE);
+                                                           HashMap lyricsMap = (HashMap) ds.getValue();
 
+                                                           videoItem = new VideoItem((String) lyricsMap.get("videoName"), (String) lyricsMap.get("videoDuration"),
+                                                                   (String) lyricsMap.get("videoSource"), (String) lyricsMap.get("videoImageUri")
+                                                                   , (String) lyricsMap.get("videoUrl"), (String) lyricsMap.get("videoUploadDate"), (Long) lyricsMap.get("videoLikes"), (Long) lyricsMap.get("videoDownloads"));
+                                                           ((VideoAdapter) recSearchResultList.getAdapter()).updateAdapter(videoItem);
+                                                       } catch (Exception e) {
+                                                           Toast.makeText(SearchResultActivity.this, "In load data for loop: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                       }
+                                                   }
+                                               }
+                                           }
 
-                                     for (DataSnapshot ds:dataSnapshot.getChildren())
-                                     {
-                                         try
-                                         {
+                                           @Override
+                                           public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                             progressBar.setVisibility(View.GONE);
-                                             HashMap lyricsMap = (HashMap)ds.getValue();
+                                           }
+                                       });
+                                     }else {
+                                         for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                             try {
+                                                 progressBar.setVisibility(View.GONE);
+                                                 HashMap lyricsMap = (HashMap) ds.getValue();
 
-                                             videoItem = new VideoItem((String)lyricsMap.get("videoName"), (String)lyricsMap.get("videoDuration"),
-                                                     (String)lyricsMap.get("videoSource"), (String)lyricsMap.get("videoImageUri")
-                                                     , (String) lyricsMap.get("videoUrl"), (String) lyricsMap.get("videoUploadDate"),(Long)lyricsMap.get("videoLikes"),(Long) lyricsMap.get("videoDownloads"));
-                                             ((VideoAdapter)recSearchResultList.getAdapter()).updateAdapter(videoItem);
-                                         }catch (Exception e)
-                                         {
-                                             Toast.makeText(SearchResultActivity.this, "In load data for loop: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                 videoItem = new VideoItem((String) lyricsMap.get("videoName"), (String) lyricsMap.get("videoDuration"),
+                                                         (String) lyricsMap.get("videoSource"), (String) lyricsMap.get("videoImageUri")
+                                                         , (String) lyricsMap.get("videoUrl"), (String) lyricsMap.get("videoUploadDate"), (Long) lyricsMap.get("videoLikes"), (Long) lyricsMap.get("videoDownloads"));
+                                                 ((VideoAdapter) recSearchResultList.getAdapter()).updateAdapter(videoItem);
+                                             } catch (Exception e) {
+                                                 Toast.makeText(SearchResultActivity.this, "In load data for loop: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                             }
                                          }
                                      }
                                  }
@@ -354,6 +343,7 @@ public class SearchResultActivity extends AppCompatActivity {
 
                              }
                          });
+
                          videoAdapter = new VideoAdapter(SearchResultActivity.this, videoItems);
                          LinearLayoutManager localLinearLayoutManager = new LinearLayoutManager(SearchResultActivity.this, 1, false);
                          recSearchResultList.setLayoutManager(localLinearLayoutManager);
@@ -361,7 +351,480 @@ public class SearchResultActivity extends AppCompatActivity {
                          recSearchResultList.setAdapter(videoAdapter);
 
                      }
+                     else if(bundle.getString("fragment").equals("lyrics")){
+                         lyricsItems=new ArrayList<>();
+                       Query lyricsQueryByName=FirebaseDatabase.getInstance().getReference()
+                               .child("songs").child("lyrics_songs").orderByChild("songName")
+                               .startAt(txtSerch.getText().toString());
+                         final Query lyricsQueryByArtist=FirebaseDatabase.getInstance().getReference()
+                                 .child("songs").child("lyrics_songs").orderByChild("artistName")
+                                 .startAt(txtSerch.getText().toString());
+                         final Query lyricsQueryByBody=FirebaseDatabase.getInstance().getReference()
+                                 .child("songs").child("lyrics_songs").orderByChild("songLyrics")
+                                 .startAt(txtSerch.getText().toString());
+                         lyricsQueryByName.addListenerForSingleValueEvent(new ValueEventListener() {
+                             @Override
+                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                 if (!dataSnapshot.exists()){
+                                   lyricsQueryByArtist.addListenerForSingleValueEvent(new ValueEventListener() {
+                                       @Override
+                                       public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                           if (!dataSnapshot.exists()){
+                                             lyricsQueryByBody.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                 @Override
+                                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                     if (!dataSnapshot.exists()){
+                                                         progressBar.setVisibility(View.GONE);
+                                                         txtSearchResult.setVisibility(View.VISIBLE);
+                                                         txtSearchResult.setText(R.string.message_result_not_found);
+                                                         txtSearchResult.setTextColor(R.color.errorColor);
+                                                     }else {
+                                                         for (DataSnapshot ds:dataSnapshot.getChildren())
+                                                         {
+                                                             try
+                                                             {
+                                                                 progressBar.setVisibility(View.GONE);
+                                                                 HashMap lyricsMap = (HashMap)ds.getValue();
 
+                                                                 lyrics = new LyricsItem((String)lyricsMap.get("songName"), (String)lyricsMap.get("artistName"),
+                                                                         (String)lyricsMap.get("artistImageUri"), (String)lyricsMap.get("songLyrics")
+                                                                         , (String) lyricsMap.get("songUri"), (String) lyricsMap.get("postedOn"));
+                                                                 ((LyricsAdapter)recSearchResultList.getAdapter()).updateAdapter(lyrics);
+                                                             }catch (Exception e)
+                                                             {
+                                                                 Toast.makeText(SearchResultActivity.this, "In load data for loop: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                             }
+                                                         }
+                                                     }
+                                                 }
+
+                                                 @Override
+                                                 public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                 }
+                                             });
+                                           }else{
+                                               for (DataSnapshot ds:dataSnapshot.getChildren())
+                                               {
+                                                   try
+                                                   {
+                                                       progressBar.setVisibility(View.GONE);
+                                                       HashMap lyricsMap = (HashMap)ds.getValue();
+
+                                                       lyrics = new LyricsItem((String)lyricsMap.get("songName"), (String)lyricsMap.get("artistName"),
+                                                               (String)lyricsMap.get("artistImageUri"), (String)lyricsMap.get("songLyrics")
+                                                               , (String) lyricsMap.get("songUri"), (String) lyricsMap.get("postedOn"));
+                                                       ((LyricsAdapter)recSearchResultList.getAdapter()).updateAdapter(lyrics);
+                                                   }catch (Exception e)
+                                                   {
+                                                       Toast.makeText(SearchResultActivity.this, "In load data for loop: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                   }
+                                               }
+                                           }
+                                       }
+
+                                       @Override
+                                       public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                       }
+                                   });
+                                 }else{
+                                     for (DataSnapshot ds:dataSnapshot.getChildren())
+                                     {
+                                         try
+                                         {
+                                             progressBar.setVisibility(View.GONE);
+                                             HashMap lyricsMap = (HashMap)ds.getValue();
+
+                                             lyrics = new LyricsItem((String)lyricsMap.get("songName"), (String)lyricsMap.get("artistName"),
+                                                     (String)lyricsMap.get("artistImageUri"), (String)lyricsMap.get("songLyrics")
+                                                     , (String) lyricsMap.get("songUri"), (String) lyricsMap.get("postedOn"));
+                                             ((LyricsAdapter)recSearchResultList.getAdapter()).updateAdapter(lyrics);
+                                         }catch (Exception e)
+                                         {
+                                             Toast.makeText(SearchResultActivity.this, "In load data for loop: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                         }
+                                     }
+                                 }
+                             }
+
+                             @Override
+                             public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                             }
+                         });
+                         lyricsAdapter = new LyricsAdapter(SearchResultActivity.this, lyricsItems);
+                         LinearLayoutManager localLinearLayoutManager = new LinearLayoutManager(SearchResultActivity.this, 1, false);
+                         recSearchResultList.setLayoutManager(localLinearLayoutManager);
+                         recSearchResultList.setHasFixedSize(true);
+                         recSearchResultList.setAdapter(lyricsAdapter);
+
+                     }
+                     else if(bundle.getString("fragment").equals("lifestyle")){
+                         lifeStyleItems=new ArrayList<>();
+                         Query queryLifesyleByTitle=FirebaseDatabase.getInstance().getReference().child("lifestyle")
+                                 .orderByChild("lifeStyleTitle");
+                         final Query queryLifesyleBySource=FirebaseDatabase.getInstance().getReference().child("lifestyle")
+                                 .orderByChild("lifestyleSource");
+                         final Query queryLifesyleByBody=FirebaseDatabase.getInstance().getReference().child("lifestyle")
+                                 .orderByChild("lifeStyleContent");
+
+                         final Query queryLifesyleByCategory=FirebaseDatabase.getInstance().getReference().child("lifestyle")
+                                 .orderByChild("lifeStyleCategory");
+
+                         queryLifesyleByTitle.addListenerForSingleValueEvent(new ValueEventListener() {
+                             @Override
+                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                 if (!dataSnapshot.exists()){
+                                     queryLifesyleBySource.addListenerForSingleValueEvent(new ValueEventListener() {
+                                         @Override
+                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                             if (!dataSnapshot.exists()){
+                                                queryLifesyleByBody.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                        if (!dataSnapshot.exists()){
+                                                            queryLifesyleByCategory.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                @Override
+                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                    if (!dataSnapshot.exists()){
+                                                                        progressBar.setVisibility(View.GONE);
+                                                                        txtSearchResult.setVisibility(View.VISIBLE);
+                                                                        txtSearchResult.setText(R.string.message_result_not_found);
+                                                                        txtSearchResult.setTextColor(R.color.errorColor);
+                                                                    }else{
+                                                                        progressBar.setVisibility(View.GONE);
+                                                                        txtSearchResult.setVisibility(View.GONE);
+                                                                        try
+                                                                        {
+                                                                            for (DataSnapshot ds:dataSnapshot.getChildren())
+                                                                            {
+                                                                                try
+                                                                                {
+                                                                                    progressBar.setVisibility(View.GONE);
+                                                                                    HashMap lifeStyleMap = (HashMap)ds.getValue();
+
+                                                                                    item = new LifestyleBuilder()
+                                                                                            .setLifeStyleTitle((String)lifeStyleMap.get("lifeStyleTitle"))
+                                                                                            .setLifestyleContent((String)lifeStyleMap.get("lifeStyleContent"))
+                                                                                            .setLifestyleSource((String)lifeStyleMap.get("lifestyleSource"))
+                                                                                            .setLifestyleUploadDate((String)lifeStyleMap.get("postedOn"))
+                                                                                            .setLifestyleImageUrl((String)lifeStyleMap.get("lifeStyleImageUrl"))
+                                                                                            .setLifestyleCategory((String)lifeStyleMap.get("lifeStyleCategory"))
+                                                                                            .build();
+
+
+                                                                                    ((LifestyleAdapter)recSearchResultList.getAdapter()).updateAdapter(item);
+                                                                                }catch (Exception e)
+                                                                                {
+                                                                                    Toast.makeText(SearchResultActivity.this, "In load data for loop: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        catch (Exception e)
+                                                                        {
+                                                                            Toast.makeText(SearchResultActivity.this, "In load data: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                        }
+                                                                    }
+                                                                }
+
+                                                                @Override
+                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                }
+                                                            });
+                                                        }else {
+                                                            progressBar.setVisibility(View.GONE);
+                                                            txtSearchResult.setVisibility(View.GONE);
+                                                            try
+                                                            {
+                                                                for (DataSnapshot ds:dataSnapshot.getChildren())
+                                                                {
+                                                                    try
+                                                                    {
+                                                                        progressBar.setVisibility(View.GONE);
+                                                                        HashMap lifeStyleMap = (HashMap)ds.getValue();
+
+                                                                        item = new LifestyleBuilder()
+                                                                                .setLifeStyleTitle((String)lifeStyleMap.get("lifeStyleTitle"))
+                                                                                .setLifestyleContent((String)lifeStyleMap.get("lifeStyleContent"))
+                                                                                .setLifestyleSource((String)lifeStyleMap.get("lifestyleSource"))
+                                                                                .setLifestyleUploadDate((String)lifeStyleMap.get("postedOn"))
+                                                                                .setLifestyleImageUrl((String)lifeStyleMap.get("lifeStyleImageUrl"))
+                                                                                .setLifestyleCategory((String)lifeStyleMap.get("lifeStyleCategory"))
+                                                                                .build();
+
+
+                                                                        ((LifestyleAdapter)recSearchResultList.getAdapter()).updateAdapter(item);
+                                                                    }catch (Exception e)
+                                                                    {
+                                                                        Toast.makeText(SearchResultActivity.this, "In load data for loop: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                    }
+                                                                }
+                                                            }
+                                                            catch (Exception e)
+                                                            {
+                                                                Toast.makeText(SearchResultActivity.this, "In load data: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                    }
+                                                });
+                                             }else {
+                                                 progressBar.setVisibility(View.GONE);
+                                                 txtSearchResult.setVisibility(View.GONE);
+                                                 try
+                                                 {
+                                                     for (DataSnapshot ds:dataSnapshot.getChildren())
+                                                     {
+                                                         try
+                                                         {
+                                                             progressBar.setVisibility(View.GONE);
+                                                             HashMap lifeStyleMap = (HashMap)ds.getValue();
+
+                                                             item = new LifestyleBuilder()
+                                                                     .setLifeStyleTitle((String)lifeStyleMap.get("lifeStyleTitle"))
+                                                                     .setLifestyleContent((String)lifeStyleMap.get("lifeStyleContent"))
+                                                                     .setLifestyleSource((String)lifeStyleMap.get("lifestyleSource"))
+                                                                     .setLifestyleUploadDate((String)lifeStyleMap.get("postedOn"))
+                                                                     .setLifestyleImageUrl((String)lifeStyleMap.get("lifeStyleImageUrl"))
+                                                                     .setLifestyleCategory((String)lifeStyleMap.get("lifeStyleCategory"))
+                                                                     .build();
+
+
+                                                             ((LifestyleAdapter)recSearchResultList.getAdapter()).updateAdapter(item);
+                                                         }catch (Exception e)
+                                                         {
+                                                             Toast.makeText(SearchResultActivity.this, "In load data for loop: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                         }
+                                                     }
+                                                 }
+                                                 catch (Exception e)
+                                                 {
+                                                     Toast.makeText(SearchResultActivity.this, "In load data: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                 }
+                                             }
+                                         }
+
+                                         @Override
+                                         public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                         }
+                                     });
+                                 }else{
+                                     progressBar.setVisibility(View.GONE);
+                                     txtSearchResult.setVisibility(View.GONE);
+                                     try
+                                     {
+                                         for (DataSnapshot ds:dataSnapshot.getChildren())
+                                         {
+                                             try
+                                             {
+                                                 progressBar.setVisibility(View.GONE);
+                                                 HashMap lifeStyleMap = (HashMap)ds.getValue();
+
+                                                 item = new LifestyleBuilder()
+                                                         .setLifeStyleTitle((String)lifeStyleMap.get("lifeStyleTitle"))
+                                                         .setLifestyleContent((String)lifeStyleMap.get("lifeStyleContent"))
+                                                         .setLifestyleSource((String)lifeStyleMap.get("lifestyleSource"))
+                                                         .setLifestyleUploadDate((String)lifeStyleMap.get("postedOn"))
+                                                         .setLifestyleImageUrl((String)lifeStyleMap.get("lifeStyleImageUrl"))
+                                                         .setLifestyleCategory((String)lifeStyleMap.get("lifeStyleCategory"))
+                                                         .build();
+
+
+                                                 ((LifestyleAdapter)recSearchResultList.getAdapter()).updateAdapter(item);
+                                             }catch (Exception e)
+                                             {
+                                                 Toast.makeText(SearchResultActivity.this, "In load data for loop: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                             }
+                                         }
+                                     }
+                                     catch (Exception e)
+                                     {
+                                         Toast.makeText(SearchResultActivity.this, "In load data: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                     }
+                                 }
+                             }
+
+                             @Override
+                             public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                             }
+                         });
+                         adapter = new LifestyleAdapter(SearchResultActivity.this, lifeStyleItems);
+                         LinearLayoutManager localLinearLayoutManager = new LinearLayoutManager(SearchResultActivity.this, 1, false);
+                         recSearchResultList.setLayoutManager(localLinearLayoutManager);
+                         recSearchResultList.setHasFixedSize(true);
+                         recSearchResultList.setAdapter(adapter);
+                     }
+                     else if (bundle.getString("fragment").equals("business")){
+                       businessItems=new ArrayList<>();
+                       progressBar.setVisibility(View.VISIBLE);
+                         Query businessQueryByTitle= FirebaseDatabase.getInstance().getReference().child("business")
+                                 .orderByChild("businessTitle").startAt(txtSerch.getText().toString());
+                          final Query businessQueryByBody= FirebaseDatabase.getInstance().getReference().child("business")
+                                 .orderByChild("businessContent").startAt(txtSerch.getText().toString());
+                          final Query businessQueryByCategory= FirebaseDatabase.getInstance().getReference().child("business")
+                                 .orderByChild("businessCategory").startAt(txtSerch.getText().toString());
+                          final Query businessQueryByOwner= FirebaseDatabase.getInstance().getReference().child("business")
+                                 .orderByChild("businessSource").startAt(txtSerch.getText().toString());
+                         businessQueryByTitle.addListenerForSingleValueEvent(new ValueEventListener() {
+                             @Override
+                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                 if (!dataSnapshot.exists()){
+                                     businessQueryByBody.addListenerForSingleValueEvent(new ValueEventListener() {
+                                         @Override
+                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                             if (!dataSnapshot.exists()){
+                                                 businessQueryByCategory.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                     @Override
+                                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                         if (!dataSnapshot.exists()){
+                                                             businessQueryByOwner.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                @Override
+                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                    if (!dataSnapshot.exists()){
+                                                                        progressBar.setVisibility(View.GONE);
+                                                                        txtSearchResult.setVisibility(View.VISIBLE);
+                                                                        txtSearchResult.setText(R.string.message_result_not_found);
+                                                                        txtSearchResult.setTextColor(R.color.errorColor);
+                                                                    }else {
+                                                                        try
+                                                                        {
+                                                                            for (DataSnapshot ds:dataSnapshot.getChildren())
+                                                                            {
+                                                                                try
+                                                                                {
+                                                                                    progressBar.setVisibility(View.GONE);
+                                                                                    HashMap lyricsMap = (HashMap)ds.getValue();
+                                                                                    businessItem = new BusinessItem((String)lyricsMap.get("businessTitle"), (String)lyricsMap.get("businessContent"),
+                                                                                            (String)lyricsMap.get("businessImageUrl"),(String)lyricsMap.get("businessUploadDate")
+                                                                                            , (String) lyricsMap.get("businessSource"), (String) lyricsMap.get("newsImageUrl"));
+                                                                                    ((BusinessAdapter)recSearchResultList.getAdapter()).updateAdapter(businessItem);
+                                                                                }catch (Exception e)
+                                                                                {
+                                                                                    Toast.makeText(SearchResultActivity.this, "In load data for loop: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        catch (Exception e)
+                                                                        {
+                                                                            Toast.makeText(SearchResultActivity.this, "In load data: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                        }
+                                                                    }
+                                                                }
+
+                                                                @Override
+                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                }
+                                                            });
+                                                         }else {
+                                                             try
+                                                             {
+                                                                 for (DataSnapshot ds:dataSnapshot.getChildren())
+                                                                 {
+                                                                     try
+                                                                     {
+                                                                         progressBar.setVisibility(View.GONE);
+                                                                         HashMap lyricsMap = (HashMap)ds.getValue();
+                                                                         businessItem = new BusinessItem((String)lyricsMap.get("businessTitle"), (String)lyricsMap.get("businessContent"),
+                                                                                 (String)lyricsMap.get("businessImageUrl"),(String)lyricsMap.get("businessUploadDate")
+                                                                                 , (String) lyricsMap.get("businessSource"), (String) lyricsMap.get("newsImageUrl"));
+                                                                         ((BusinessAdapter)recSearchResultList.getAdapter()).updateAdapter(businessItem);
+                                                                     }catch (Exception e)
+                                                                     {
+                                                                         Toast.makeText(SearchResultActivity.this, "In load data for loop: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                     }
+                                                                 }
+                                                             }
+                                                             catch (Exception e)
+                                                             {
+                                                                 Toast.makeText(SearchResultActivity.this, "In load data: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                             }
+                                                         }
+                                                     }
+
+                                                     @Override
+                                                     public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                     }
+                                                 });
+                                             }else {
+                                                 try
+                                                 {
+                                                     for (DataSnapshot ds:dataSnapshot.getChildren())
+                                                     {
+                                                         try
+                                                         {
+                                                             progressBar.setVisibility(View.GONE);
+                                                             HashMap lyricsMap = (HashMap)ds.getValue();
+                                                             businessItem = new BusinessItem((String)lyricsMap.get("businessTitle"), (String)lyricsMap.get("businessContent"),
+                                                                     (String)lyricsMap.get("businessImageUrl"),(String)lyricsMap.get("businessUploadDate")
+                                                                     , (String) lyricsMap.get("businessSource"), (String) lyricsMap.get("newsImageUrl"));
+                                                             ((BusinessAdapter)recSearchResultList.getAdapter()).updateAdapter(businessItem);
+                                                         }catch (Exception e)
+                                                         {
+                                                             Toast.makeText(SearchResultActivity.this, "In load data for loop: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                         }
+                                                     }
+                                                 }
+                                                 catch (Exception e)
+                                                 {
+                                                     Toast.makeText(SearchResultActivity.this, "In load data: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                 }
+                                             }
+                                         }
+
+                                         @Override
+                                         public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                         }
+                                     });
+                                 }else{
+                                     try
+                                     {
+                                         for (DataSnapshot ds:dataSnapshot.getChildren())
+                                         {
+                                             try
+                                             {
+                                                 progressBar.setVisibility(View.GONE);
+                                                 HashMap lyricsMap = (HashMap)ds.getValue();
+
+                                                 businessItem = new BusinessItem((String)lyricsMap.get("businessTitle"), (String)lyricsMap.get("businessContent"),
+                                                         (String)lyricsMap.get("businessImageUrl"),(String)lyricsMap.get("businessUploadDate")
+                                                         , (String) lyricsMap.get("businessSource"), (String) lyricsMap.get("newsImageUrl"));
+                                                 ((BusinessAdapter)recSearchResultList.getAdapter()).updateAdapter(businessItem);
+                                             }catch (Exception e)
+                                             {
+                                                 Toast.makeText(SearchResultActivity.this, "In load data for loop: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                             }
+                                         }
+                                     }
+                                     catch (Exception e)
+                                     {
+                                         Toast.makeText(SearchResultActivity.this, "In load data: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                     }
+                                 }
+                             }
+
+                             @Override
+                             public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                             }
+                         });
+
+                         businessAdapter = new BusinessAdapter(SearchResultActivity.this, businessItems);
+                         LinearLayoutManager localLinearLayoutManager = new LinearLayoutManager(SearchResultActivity.this, 1, false);
+                         recSearchResultList.setLayoutManager(localLinearLayoutManager);
+                         recSearchResultList.setHasFixedSize(true);
+                         recSearchResultList.setAdapter(businessAdapter);
+                     }
                    }
 
                 }

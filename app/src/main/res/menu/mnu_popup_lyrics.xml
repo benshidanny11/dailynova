@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:title="Listen"
+        android:id="@+id/mnu_listen_to_the_song"
+
+        />
+    <item
+        android:title="Read lyrics"
+        android:id="@+id/mnu_read_lyrics"
+
+        />
+    <item
+        android:title="Share"
+        android:id="@+id/mnu_share_audio"
+
+        />
+</menu>

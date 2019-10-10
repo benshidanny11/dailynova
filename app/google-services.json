@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "841440224162-tqe8j7ndb3ap7ibl2bggffblcsbkvhvt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.dailynova",
+            "certificate_hash": "53c05bf121bee429f519f1fbb017b44114eb30b6"
+          }
+        },
+        {
           "client_id": "841440224162-j42ik6hunof59u29oeo0443mkb50fq22.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

@@ -88,14 +88,29 @@
                 <ImageView
                     android:layout_width="@dimen/_18sdp"
                     android:layout_height="@dimen/_18sdp"
-                    app:srcCompat="@drawable/ic_arrow_downward_black_24dp"
+                    app:srcCompat="@drawable/ic_play_arrow_black_24dp"
                     android:layout_centerVertical="true"
-                    android:layout_centerHorizontal="true"
-                    android:id="@+id/img_download_lyrics_audio_in_row_lyrics"/>
+                    android:id="@+id/img_play_lyrics_audio_in_row_lyrics"/>
                 <ImageView
                     android:layout_width="@dimen/_18sdp"
                     android:layout_height="@dimen/_18sdp"
-                    app:srcCompat="@drawable/ic_share_black_24dp"
+                    app:srcCompat="@drawable/ic_arrow_downward_black_24dp"
+                   android:layout_centerInParent="true"
+                    android:id="@+id/img_download_lyrics_audio_in_row_lyrics"/>
+                <ProgressBar
+                    android:id="@+id/progress_for_downloading_song_in_lyrics_item"
+                    android:layout_width="@dimen/_18sdp"
+                    android:layout_height="@dimen/_18sdp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/_2sdp"
+                    android:visibility="gone"
+                    android:indeterminateDrawable="@drawable/progressbar"
+                    />
+                <ImageView
+                    android:layout_width="@dimen/_18sdp"
+                    android:layout_height="@dimen/_18sdp"
+                    app:srcCompat="@drawable/share_img"
                     android:layout_alignParentRight="true"
                     android:id="@+id/img_share_lyrics_audio_in_row_lyrics"
                     android:layout_centerVertical="true"

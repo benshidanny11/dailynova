@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<item
+    android:title="View later"
+    android:id="@+id/mnu_view_later"
+
+    />
+    <item
+        android:title="Play video"
+        android:id="@+id/mnu_play_video"
+
+        />
+    <item
+        android:title="Share"
+        android:id="@+id/mnu_share_video"
+
+        />
+</menu>

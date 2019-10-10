@@ -2,8 +2,8 @@ package com.example.dailynova.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +37,7 @@ public class LifestyleAdapter extends RecyclerView.Adapter<LifestyleAdapter.Life
       final LifeStyleItem item=lifeStyleItems.get(i);
       lifestyleHolder.txtLifeStyleTitle.setText(item.getLifeStyleTitle());
       lifestyleHolder.txtLifeStyleContent.setText(item.getLifestyleContent());
-      lifestyleHolder.txtLifeStyleSource.setText("From "+item.getLifestyleSource());
+      lifestyleHolder.txtLifeStyleSource.setText(item.getLifestyleSource());
       lifestyleHolder.txtLifeStyleUploadDate.setText(item.getLifestyleUploadDate());
         Glide.with(context).load(item.getLifestyleImageUrl()).into(lifestyleHolder.imgLifeStyleImage);
 

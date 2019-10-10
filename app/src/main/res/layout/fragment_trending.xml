@@ -52,17 +52,23 @@
         android:background="#F5F4F4">
 
     </LinearLayout>
-    <android.support.v7.widget.RecyclerView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/rec_trending_list"
         android:layout_below="@+id/lyt_separator">
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/rec_trending_list"
+            >
 
-    </android.support.v7.widget.RecyclerView>
-    <ProgressBar
-        android:layout_width="@dimen/_30sdp"
-        android:layout_height="@dimen/_30sdp"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/progress_in_fragment_trending"
-        android:visibility="gone"/>
+        </androidx.recyclerview.widget.RecyclerView>
+        <ProgressBar
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/progress_in_fragment_trending"
+            android:visibility="gone"
+            android:indeterminateDrawable="@drawable/progressbar"/>
+    </RelativeLayout>
 </RelativeLayout>

@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SearchResultActivity"></activity>
+        <activity android:name=".DisplayBusinesActivity"></activity>
+        <activity android:name=".SearchResultActivity" />
         <activity android:name=".WhatappStatusActivity" />
         <activity android:name=".DisplayLifeStyleActivity" />
         <activity android:name=".DisplayNewsActivity" />
@@ -21,7 +22,17 @@
         <activity android:name=".PlayVideoActivity" />
         <activity
             android:name=".MainActivity"
-            android:label="@string/title_activity_main" />
+            android:label="@string/title_activity_main"
+            android:windowSoftInputMode="stateUnchanged"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.SEND"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="images/*"/>
+                <data android:mimeType="videos/*"/>
+                <data android:mimeType="audios/*"/>
+            </intent-filter>
+        </activity>
         <activity android:name=".WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
