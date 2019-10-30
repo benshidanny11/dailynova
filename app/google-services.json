@@ -1,50 +1,42 @@
 {
   "project_info": {
-    "project_number": "841440224162",
-    "firebase_url": "https://funvids-94fc4.firebaseio.com",
-    "project_id": "funvids-94fc4",
-    "storage_bucket": "funvids-94fc4.appspot.com"
+    "project_number": "935474148887",
+    "firebase_url": "https://dailynova.firebaseio.com",
+    "project_id": "dailynova",
+    "storage_bucket": "dailynova.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:841440224162:android:f8095feb6630d54b",
+        "mobilesdk_app_id": "1:935474148887:android:4909516f95107064818e52",
         "android_client_info": {
-          "package_name": "com.example.dailynova"
+          "package_name": "com.danny.dailynova"
         }
       },
       "oauth_client": [
         {
-          "client_id": "841440224162-tqe8j7ndb3ap7ibl2bggffblcsbkvhvt.apps.googleusercontent.com",
+          "client_id": "935474148887-hcq56l3co6gj6h4hfpkp5lghr81bt4v2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.dailynova",
+            "package_name": "com.danny.dailynova",
             "certificate_hash": "53c05bf121bee429f519f1fbb017b44114eb30b6"
           }
         },
         {
-          "client_id": "841440224162-j42ik6hunof59u29oeo0443mkb50fq22.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.dailynova",
-            "certificate_hash": "755585df7be7004bb57b119f29ca919ffc166b1e"
-          }
-        },
-        {
-          "client_id": "841440224162-5ern199nktjf0a1daebjenhb8e69flob.apps.googleusercontent.com",
+          "client_id": "935474148887-2fplid50lin3g613bns4n6s6fak5u36l.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCDX7UrE27GX_wgntqkxoLXzKr2trcF9Yw"
+          "current_key": "AIzaSyD4JUkNRMqZzCkzIt-XRHOt7A5WQTCc1wk"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "841440224162-5ern199nktjf0a1daebjenhb8e69flob.apps.googleusercontent.com",
+              "client_id": "935474148887-2fplid50lin3g613bns4n6s6fak5u36l.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
@@ -53,35 +45,35 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:841440224162:android:4a232aa1abc30b3d",
+        "mobilesdk_app_id": "1:935474148887:android:fc8b749c36949888818e52",
         "android_client_info": {
           "package_name": "com.example.kamovibesposter"
         }
       },
       "oauth_client": [
         {
-          "client_id": "841440224162-l4gq8ei3mrlg8t3bms95to91jsoe2te2.apps.googleusercontent.com",
+          "client_id": "935474148887-o8odd2jn9an8p79a3ek82et9n1em67g9.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.kamovibesposter",
-            "certificate_hash": "755585df7be7004bb57b119f29ca919ffc166b1e"
+            "certificate_hash": "53c05bf121bee429f519f1fbb017b44114eb30b6"
           }
         },
         {
-          "client_id": "841440224162-5ern199nktjf0a1daebjenhb8e69flob.apps.googleusercontent.com",
+          "client_id": "935474148887-2fplid50lin3g613bns4n6s6fak5u36l.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCDX7UrE27GX_wgntqkxoLXzKr2trcF9Yw"
+          "current_key": "AIzaSyD4JUkNRMqZzCkzIt-XRHOt7A5WQTCc1wk"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "841440224162-5ern199nktjf0a1daebjenhb8e69flob.apps.googleusercontent.com",
+              "client_id": "935474148887-2fplid50lin3g613bns4n6s6fak5u36l.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
